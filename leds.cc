@@ -18,8 +18,8 @@ int main()
     int bytes, port;
     int serialport;
     serialport = open("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_NDELAY);
-    bool note_array[108];
-    for (int i = 0; i < 108; i++)
+    bool note_array[109];
+    for (int i = 0; i < 109; i++)
     {
         note_array[i] = false;
     }
@@ -42,6 +42,7 @@ int main()
     cout << "Receiving on " << midiin->getPortName(port) << endl;
 
     unsigned char buffer[11] = {0};
+    cout << (int)buffer[10] << endl;
     while (true)
     {
         stamp = midiin->getMessage( &message );
@@ -49,7 +50,7 @@ int main()
         for (int i = 0; i < bytes; i++)
         {
             cout << "Byte " << i << ": ";
-           printf("0x%x\n", (int)message[i]);
+            printf("0x%x\n", (int)message[i]);
             if ((message[i + 0] & 0xA0) == 0xA0)
                 continue;
             else if ((message[i + 0] & 0xF0) == 0xF0)
@@ -74,9 +75,11 @@ int main()
                 cout << "Note OFF: " << (int)message[i+1] << endl;
                 note_array[message[i + 1]] = false;
             }
+            cout << "a" << (int)buffer[10] << endl;
         }
         if (message.size() > 0)
         {
+            cout << "b" << (int)buffer[10] << endl;
             int note_number = 21;
 	        for (int j = 0; j < 11; j++)
 	        {
